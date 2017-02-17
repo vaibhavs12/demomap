@@ -66,6 +66,6 @@ gem 'leaflet-rails'
 gem 'capistrano'
 gem 'capistrano-bundler'
 gem 'capistrano-rails'
-gem 'capistrano-rbenv'
+gem 'capistrano-rvm'
 gem 'capistrano-maintenance', '~> 1.0', require: false
 gem 'capistrano-faster-assets', '~> 1.0'
