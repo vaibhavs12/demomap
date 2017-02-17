@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -63,3 +63,9 @@ gem 'aws-sdk', '~> 2.3'
 
 gem 'leaflet-rails'
 
+gem 'capistrano'
+gem 'capistrano-bundler'
+gem 'capistrano-rails'
+gem 'capistrano-rbenv'
+gem 'capistrano-maintenance', '~> 1.0', require: false
+gem 'capistrano-faster-assets', '~> 1.0'
