@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <title>MapDemo</title>
+	  <%= stylesheet_link_tag    'application', media: 'all' %>
+	  <%= javascript_include_tag 'application' %>
+	  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+	  </script>
+	  <%= csrf_meta_tags %>
+	</head>
+	<body>
+		<%= render 'layouts/header'%>
+		<%= yield %>
+	</body>
+  <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&callback=initMap"> -->
+  </script>
+</html>

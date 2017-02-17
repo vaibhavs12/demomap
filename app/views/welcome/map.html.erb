@@ -1,0 +1,45 @@
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+<script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
+  <div id="map" style='width: 1200px; height: 800px;'></div>
+<script type="text/javascript">
+<% all_locations =[]%>
+<% @users.each do |user| %>
+  <%lat_lng = [user.latitude]+[user.longitude] %>
+  <% name = user.email %>
+  <% user_image = user.avatar.present? ? user.avatar.url(:medium) : "/assets/map-marker.png" %>
+  <% all_locations << lat_lng+[name]+[user_image] %>
+<% end %>
+var locations = <%= raw all_locations %>
+	 var tiles = L.tileLayer('http://a.tile.osm.org/{z}/{x}/{y}.png', {
+    minZoom: 2,
+    maxZoom: 7,
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  }),
+  latlng = L.latLng(22.7196, 75.8577);
+
+var map = L.map('map', {
+	maxBounds:[ [-90, -160], [90, 200] ],
+  center: latlng,
+  zoom: 2,
+  layers: [tiles]
+});
+
+var markers = L.markerClusterGroup();
+
+for (var i = 0; i < locations.length; i++) {
+	var myIcon = L.icon({
+	  iconUrl: locations[i][3],
+	  iconShadowUrl: locations[i][3],
+	  iconSize: [29, 24],
+	  iconAnchor: [9, 21],
+	  popupAnchor: [0, -14]
+	});
+	var popup = '<h2>'+locations[i][2]+'</h2>' +
+              '<br/>'+'<img src="'+locations[i][3]+'">';
+	var m = L.marker( [locations[i][0], locations[i][1]],{icon: myIcon}).bindPopup( popup );
+	markers.addLayer(m);
+}
+map.addLayer( markers );
+</script>
+<script type="text/javascript"></script>

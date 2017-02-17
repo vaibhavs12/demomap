@@ -1,0 +1,75 @@
+<div>
+  <div id="map" style='width: 1200px; height: 800px;'></div>
+</div>
+
+
+<script>
+  <%current_lat = request.location.latitude%>
+  <%current_lng = request.location.latitude%>
+  <% all_locations =[]%>
+  <% @users.each do |user| %>
+    <%lat_lng = [user.latitude]+[user.longitude] %>
+    <% name = user.email %>
+    <% user_image = user.avatar.present? ? user.avatar.url(:thumb) : "/assets/map-marker.png" %>
+    <% all_locations << lat_lng+[name]+[user_image] %>
+  <%end %>
+  var locations = <%= raw all_locations %>
+
+  // r = radius of the earth in statute miles
+  var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
+  var icons = [
+    iconURLPrefix + 'orange-dot.png'
+  ]
+  var iconsLength = icons.length;
+  function initMap() {
+    infowindow = new google.maps.InfoWindow({
+      maxWidth: 160
+    });
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 2,
+      minZoom: 2,
+      scrollwheel: false,
+      draggable: false,
+      center: {lat: <%= current_lat %>, lng: <%= current_lng %>}
+    });
+    var markers = new Array(); 
+    var iconCounter = 0;       
+    for (var i = 0; i < locations.length; i++) {
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][0], locations[i][1]),
+        map: map,
+        icon: locations[i][3]
+      });
+      markers.push(marker);
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent('<img src="' + locations[i][3] + '"/>' + locations[i][2]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+      
+      iconCounter++;
+      if(iconCounter >= iconsLength) {
+        iconCounter = 0;
+      }
+    }       
+    // google.maps.event.addListener(map, 'click', function(event){
+    //     this.setOptions({scrollwheel:true});
+    //     this.setOptions({draggable:true});
+    //   });
+    // Add a marker clusterer to manage the markers.
+    var markerCluster = new MarkerClusterer(map, markers,
+        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    var strictBounds = new google.maps.LatLngBounds(
+     new google.maps.LatLng(28.70, -127.50), 
+     new google.maps.LatLng(48.85, -45.90)
+   );
+
+   // Listen for the CENTER_CHANGED event
+   // Limit the zoom level
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+      this.setOptions({scrollwheel:true});
+      this.setOptions({draggable:true});
+    });
+  }
+</script>
