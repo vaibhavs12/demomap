@@ -84,5 +84,5 @@ development:
 production:
   <<: *default
   database: map_demo_production
-  username: map_demo
+  username: postgres
   password: 12345678
