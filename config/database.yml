@@ -85,4 +85,4 @@ production:
   <<: *default
   database: map_demo_production
   username: map_demo
-  password: <%= ENV['MAP_DEMO_DATABASE_PASSWORD'] %>
+  password: 12345678
